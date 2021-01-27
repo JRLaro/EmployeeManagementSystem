@@ -21,4 +21,4 @@ connection.query = util.promisify(connection.query, console.log("You are connect
 // });
 
 
-module.exports = connect;
+module.exports = connection;
