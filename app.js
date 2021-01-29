@@ -60,7 +60,7 @@ function loadMainMenu() {
 }
 ///////////////////////////////////////// VIEW EMPLOYEES////////////////////
 function viewEmployee() {
-    var query = "SELECT * FROM employee";
+    var query = "SELECT first_name, last_name FROM employee";
     connection.query(query, function (err, answers) {
         if (err) throw err;
         console.table(answers);
@@ -70,7 +70,7 @@ function viewEmployee() {
 };
 ///////////////////////////////////////// VIEW DEPARTMENT////////////////////
 function viewDepartments() {
-    var query = "SELECT * FROM department";
+    var query = "SELECT name FROM department";
     connection.query(query, function (err, answers) {
         if (err) throw err;
         console.table(answers);
@@ -169,7 +169,7 @@ function addDepartment() {
 };
 ///////////////////////////////////////// ADD ROLE////////////////////
 function addRole() {
-    connection.query("SELECT name FROM department", function (err, answers) {
+    connection.query("SELECT * FROM department", function (err, answers) {
         inquirer.prompt([
             {
                 name: "roleTitle",
@@ -185,7 +185,7 @@ function addRole() {
             },
             {
                 name: "deptId",
-                type: "input",
+                type: "list",
                 message: "What is the Department of this Role?",
                 choices: function () {
                     var deptArray = [];
@@ -194,13 +194,12 @@ function addRole() {
                     }
                     return deptArray;
                 },
-
             },
         ]).then((response) => {
             var chosenDeptId;
             for (var i = 0; i < answers.length; i++) {
-                if (answers[i].name === response.department_id) {
-                    chosenDeptId = answers[i].name;
+                if (answers[i].name === response.deptId) {
+                    chosenDeptId = answers[i].id;
                 }
             }
             connection.query(
