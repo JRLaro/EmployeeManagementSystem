@@ -35,9 +35,9 @@ function loadMainMenu() {
                 addEmployee();
                 break;
             case "Add Department":
-                addDept();
+                addDepartment();
                 break;
-            case "Add Role":
+            case "Add Roles":
                 addRole();
                 break;
             case "Update Employee":
@@ -65,6 +65,24 @@ function viewEmployee() {
         if (err) throw err;
         console.table(answers);
 
+        loadMainMenu();
+    });
+};
+///////////////////////////////////////// VIEW DEPARTMENT////////////////////
+function viewDepartments() {
+    var query = "SELECT * FROM department";
+    connection.query(query, function (err, answers) {
+        if (err) throw err;
+        console.table(answers);
+        loadMainMenu();
+    });
+};
+///////////////////////////////////////// VIEW ROLE////////////////////
+function viewRole() {
+    var query = "SELECT title FROM role";
+    connection.query(query, function (err, answers) {
+        if (err) throw err;
+        console.table(answers);
         loadMainMenu();
     });
 };
@@ -125,5 +143,83 @@ function addEmployee() {
         });
     });
 }
+///////////////////////////////////////// ADD DEPARTMENT////////////////////
+function addDepartment() {
+    inquirer.prompt([
+        {
+            name: "deptName",
+            type: "input",
+            message: "What is the name of the Department you would like to add?"
 
-// viewDepartments()
+        },
+    ]).then((answers) => {
+
+        connection.query(
+            "INSERT INTO department SET ?", // this takes in the obj below ""
+            {
+                name: answers.deptName
+            },
+            function (err) {
+                if (err) throw err;
+                console.log("Your Department was successfully added");
+                loadMainMenu();
+            }
+        );
+    });
+};
+///////////////////////////////////////// ADD ROLE////////////////////
+function addRole() {
+    connection.query("SELECT name FROM department", function (err, answers) {
+        inquirer.prompt([
+            {
+                name: "roleTitle",
+                type: "input",
+                message: "What is the name of the Role you would like to add?"
+
+            },
+            {
+                name: "roleSalary",
+                type: "input",
+                message: "What is the salary of this specific Role?"
+
+            },
+            {
+                name: "deptId",
+                type: "input",
+                message: "What is the Department of this Role?",
+                choices: function () {
+                    var deptArray = [];
+                    for (var i = 0; i < answers.length; i++) {
+                        deptArray.push(answers[i].name);
+                    }
+                    return deptArray;
+                },
+
+            },
+        ]).then((response) => {
+            var chosenDeptId;
+            for (var i = 0; i < answers.length; i++) {
+                if (answers[i].name === response.department_id) {
+                    chosenDeptId = answers[i].name;
+                }
+            }
+            connection.query(
+                "INSERT INTO role SET ?", // this takes in the obj below ""
+                {
+                    title: response.roleTitle,
+                    salary: response.roleSalary,
+                    department_id: chosenDeptId
+
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("Your Role was successfully added");
+                    loadMainMenu();
+                }
+            );
+        });
+
+    });
+}
+
+// JOSE YOU NEED TO WORK ON ADD ROLE (as it is not reflecting the array of current Department. ---> essentially you need to just emulate addEmployees - Role section....Good luck.
