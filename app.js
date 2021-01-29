@@ -1,26 +1,25 @@
+// dependencies
 const inquirer = require('inquirer');
 const logo = require('asciiart-logo');
 const connection = require('./db/connection');
 
-
-// require('console.table');
-
-init();
-
-function init() {
+// emsLogo -> displays the logo 
+emsLogo();
+function emsLogo() {
     //adds the logo
     const logoText = logo({ name: "Employee Management System" }).render();
     console.log(logoText);
     loadMainMenu();
 }
-// starts the prompts
+////// loadMainMenu starts the prompts
 function loadMainMenu() {
     inquirer.prompt({
         name: "choices",
         type: "list",
         message: "What would you like to do?",
         choices: ["View Employees", "View Departments", "View Roles", "Add Employee", "Add Department", "Add Roles", "Update Employee", "Update Department", "Update Role", "Actually...NVM"]
-    }).then((answers) => { // OPTION and OUTCOME
+//// OPTION and OUTCOME
+    }).then((answers) => { 
         switch (answers.choices) {
             case "View Employees":
                 viewEmployee();
@@ -64,7 +63,6 @@ function viewEmployee() {
     connection.query(query, function (err, answers) {
         if (err) throw err;
         console.table(answers);
-
         loadMainMenu();
     });
 };
@@ -104,7 +102,6 @@ function addEmployee() {
             {
                 name: "role",
                 type: "list",
-                // add list of roles
                 choices: function () {
                     var roleArray = [];
                     for (var i = 0; i < answers.length; i++) {
@@ -150,10 +147,8 @@ function addDepartment() {
             name: "deptName",
             type: "input",
             message: "What is the name of the Department you would like to add?"
-
         },
     ]).then((answers) => {
-
         connection.query(
             "INSERT INTO department SET ?", // this takes in the obj below ""
             {
@@ -174,14 +169,28 @@ function addRole() {
             {
                 name: "roleTitle",
                 type: "input",
-                message: "What is the name of the Role you would like to add?"
-
+                message: "What is the name of the Role you would like to add?",
+                validate: function(value) {
+                    if (!(value) === false) {
+                        return true;
+                    } else {
+                        console.log('*Please enter a valid Role!*');
+                        return false;
+                    }
+                  }
             },
             {
                 name: "roleSalary",
                 type: "input",
-                message: "What is the salary of this specific Role?"
-
+                message: "What is the salary of this specific Role?",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    } else {
+                        console.log(' *Please enter a valid number!*');
+                        return false;
+                    }
+                  }
             },
             {
                 name: "deptId",
@@ -208,17 +217,13 @@ function addRole() {
                     title: response.roleTitle,
                     salary: response.roleSalary,
                     department_id: chosenDeptId
-
                 },
                 function (err) {
                     if (err) throw err;
-                    console.log("Your Role was successfully added");
+                    console.log("Your Role was successfully added!");
                     loadMainMenu();
                 }
             );
         });
-
     });
 }
-
-// JOSE YOU NEED TO WORK ON ADD ROLE (as it is not reflecting the array of current Department. ---> essentially you need to just emulate addEmployees - Role section....Good luck.
