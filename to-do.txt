@@ -1,0 +1,16 @@
+view all employees()
+view all employees by Dept.
+view all employees by Manager
+add employees
+remove employee
+update employee
+
+
+
+Add departments, roles, employees
+
+View departments, roles, employees
+
+Update employee roles
+
+viewDepartments()

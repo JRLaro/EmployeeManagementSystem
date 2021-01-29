@@ -22,3 +22,8 @@ CREATE TABLE employees (-- creates table w/additional content
     role_id INT UNSIGNED NOT NULL,
     manager_id INT UNSIGNED
 )
+
+
+SELECT *
+FROM employee
+INNER JOIN
