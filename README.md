@@ -24,6 +24,8 @@ The application will be invoked by using the following command:
 (npm install inquirer, mysql, asciiart-logo)
 
 ## *Usage* 
+> Here is how it works: https://drive.google.com/file/d/1ESpPYYCadS1ZJKvA_-prvEaNOyqWJImZ/view?usp=sharing
+
 ![](assets/screenShot.png)
   
 ## *How to Use*
@@ -31,8 +33,8 @@ The application will be invoked by using the following command:
 
 ## *Author Info*  
   
-> Email: joselarojr@gmail.com
-- GitHub User: JRLaro
+- Email: joselarojr@gmail.com
+- GitHub User: JRLaro =>  https://github.com/JRLaro
   
 ## *Credits // License*
       
