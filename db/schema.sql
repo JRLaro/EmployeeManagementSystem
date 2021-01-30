@@ -21,9 +21,10 @@ CREATE TABLE employees (-- creates table w/additional content
     last_name VARCHAR(30) NOT NULL,
     role_id INT UNSIGNED NOT NULL,
     manager_id INT UNSIGNED
-)
+);
 
-
-SELECT *
+-- possible INNER JOIN -- 
+SELECT employee.role_id, role.id
 FROM employee
-INNER JOIN
+INNER JOIN role ON employee.role_id = role.id;
+
